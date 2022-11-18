@@ -1,11 +1,7 @@
 #include <iostream>
 
 #include "../include/utility.h"
-#include "../include/kamar.h"
-#include "../include/wbp.h"
-#include "../include/kunjungan.h"
 #include "../include/menu.h"
-#include "../include/operator.h"
 
 using namespace std;
 
@@ -15,87 +11,52 @@ int main() {
   bool is_main_running = false;
   bool is_master_running = false;
   bool is_login = false;
-  int guess_choice, master_choice , main_choice, wbp_list_choice;
+  int landing_choice, login_choice , main_choice, wbp_list_choice;
+  bool is_login_running = false;
 
   while(is_running) {
-    guess_choice = menu::guess();
-    switch (guess_choice) {
+    landing_choice = menu::landing();
+    switch (landing_choice) {
       case 1:
-        kunjungan::create();
-        break;
-      case 2:
-        kunjungan::check();
-        break;
-      case 3:
-        is_wbp_list_running = true;
-        wbp::list();
-        while(is_wbp_list_running) {
-          wbp_list_choice = menu::searching();;
-          switch (wbp_list_choice) {
+        is_login_running = true;
+        while(is_login_running) {
+          login_choice = menu::login();
+          switch (login_choice) {
             case 1:
-              wbp::sort();
+              /* code */
               break;
             case 2:
-              wbp::search();
+              /* code */
               break;
             case 3:
-              wbp::list();
+              /* code */
               break;
             case 4:
-              is_wbp_list_running = false;
+              is_login_running = false;
+              break;
+            default:
+              if(landing_choice != 5) {
+                utility::notify("error", "Pilihan tidak ada!");
+              }
               break;
           }
         }
         break;
+      case 2:
+        utility::notify("info", "Terima kasih!");
+        break;
+      case 3:
+        utility::notify("info", "Terima kasih!");
+        break;
       case 4:
-        is_login = op::login();
-        if(is_login) {
-          utility::notify("success", "Berhasil login!");
-          is_main_running = true;
-          while(is_main_running) {
-            main_choice = menu::main();
-            switch (main_choice) {
-              case 1:
-                kunjungan::validate();
-                break;
-              case 2:
-                kamar::schedule();
-                break;
-              case 3:
-                is_master_running = true;
-                while(is_master_running) {
-                  master_choice = menu::master();
-                  switch (master_choice) {
-                    case 1:
-                      kunjungan::index();
-                      break;
-                    case 2:
-                      wbp::index();
-                      break;
-                    case 3:
-                      kamar::index();
-                      break;
-                    case 4:
-                      is_master_running = false;
-                      break;
-                  }
-                }
-                break;
-              case 4:
-                is_main_running = false;
-                utility::notify("info", "Terima kasih!");
-                break;
-            }
-          }
-        } else {
-          utility::notify("error", "Akun tidak terdaftar!");
-        }
+        utility::header("Mangan - Tentang");
+        utility::notify("info", "Untuk Kembali", true);
         break;
       case 5:
         is_running = false;
         utility::notify("info", "Terima kasih!");
       default:
-        if(guess_choice != 5) {
+        if(landing_choice != 5) {
           utility::notify("error", "Pilihan tidak ada!");
         }
         break;

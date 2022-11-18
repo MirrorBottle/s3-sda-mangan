@@ -18,6 +18,29 @@ namespace menu {
       return 0;
     }
   }
+
+  int landing() {
+    string choice;
+    utility::header("Mangan - Antaran Ketika Lapar");
+    cout  << "1. Masuk" << endl
+          << "2. Registrasi" << endl
+          << "3. Menjadi Partner" << endl
+          << "4. Tentang" << endl
+          << "5. Keluar" << endl
+          << "Pilih : "; cin >> choice;
+    return check(choice);
+  }
+
+  int login() {
+    string choice;
+    utility::header("Mangan - Masuk Sebagai?");
+    cout  << "1. Pengguna" << endl
+          << "2. Partner" << endl
+          << "3. Partner" << endl
+          << "4. Kembali" << endl
+          << "Pilih : "; cin >> choice;
+    return check(choice);
+  }
   // ** FOR THE MAIN
   int guess() {
     string choice;

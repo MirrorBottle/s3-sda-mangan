@@ -1,15 +1,20 @@
-# Visitme.
+# Mangan.
 ## Tentang
 Sistem Kunjungan Lapas Online untuk Projek Akhir Algoritma Pemrograman Online Informatika A 2021
 
 ## Anggota
-1. **2109106018** Alfi Nor Ihsan
-2. **2109106021** Adlina Safa Sephia Putri
+1. **2109106002** Alif Maulana Setyawan
+2. **2109106024** Ananta Yusra Putra Akmal
 3. **2109106026** Bayu Setiawan
-4. **2109106028** Muhammad Nandaarjuna Fadhillah
 
-## Format CSV
-1. kamar: kode_kamar,nama_kamar
-2. operator: username,password,role
-3. kunjungan: kode_kunjungan,kode_wbp,tanggal,nama_pengunjung,nik_pengunjung,status(1=menunggu,2=diterima,3=ditolak),jam_mulai,jam_selesai,kode_kamar,catatan
-4. wbp: kode_wbp,nama_wbp
+## Daftar CSV
+
+1. users: id,name,email,address,phone_number,password,lat,long
+1. partners: id,name,email,address,phone_number,password,lat,long
+2. drivers: id,name,email,phone_number,password,plate_number
+3. menus: id,user_id,name,description,price,is_available
+4. deliveries: id,user_id,driver_id,partner_id,partner_lat,partner_long,destination_lat,destination_long,distance,fee,start_at,end_at
+5. delivery_details: id,delivery_id,menu_id,amount,fee
+6. delivery_histories: id,delivery_id,status,time,is_completed,description
+7. delivery_ratings: id,delivery_id,ratings,comments,tip
+8. settings: key,value
