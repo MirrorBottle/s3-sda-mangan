@@ -6,6 +6,11 @@ app.get("/", (req, res) => {
   res.send("Express on Vercel");
 });
 
+app.post("/", (req, res) => {
+  console.log(req, res);
+  res.send("Express on Vercel");
+});
+
 app.listen(5000, () => {
   console.log("Running on port 5000.");
 });
