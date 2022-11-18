@@ -10,18 +10,7 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   const { uri } = req;
-  request(
-    {
-      uri: uri,
-      followRedirect: false,
-    },
-    function (err, httpResponse) {
-      if (err) {
-        return console.error(err);
-      }
-      return res.send(httpResponse.headers.location);
-    }
-  );
+  return res.send(req);
   
 });
 
