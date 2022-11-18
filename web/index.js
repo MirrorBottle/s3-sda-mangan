@@ -1,4 +1,6 @@
 const express = require("express");
+var request = require('request');
+
 
 const app = express();
 
@@ -7,8 +9,20 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-  console.log(req, res);
-  res.send("Express on Vercel");
+  const { uri } = req;
+  request(
+    {
+      uri: uri,
+      followRedirect: false,
+    },
+    function (err, httpResponse) {
+      if (err) {
+        return console.error(err);
+      }
+      return res.send(httpResponse.headers.location);
+    }
+  );
+  
 });
 
 app.listen(5000, () => {
