@@ -50,11 +50,14 @@ namespace utility {
     return is_confirmed == "y" || is_confirmed == "Y";
   }
 
-  void header(string title) {
+  void header(string title, string subtitle = "") {
     system("cls");
-    utility::cout("cyan", "\n\n=================================");
-    utility::cout("cyan", title);
-    utility::cout("cyan", "=================================");
+    utility::cout("red", "\n\n=================================");
+    utility::cout("red", title);
+    if(subtitle != "") {
+      utility::cout("white", subtitle);
+    }
+    utility::cout("red", "=================================");
   }
 
   string toLower(string word) {

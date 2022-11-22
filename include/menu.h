@@ -22,11 +22,11 @@ namespace menu {
   int landing() {
     string choice;
     utility::header("Mangan - Antaran Ketika Lapar");
-    cout  << "1. Masuk" << endl
-          << "2. Registrasi" << endl
-          << "3. Menjadi Partner" << endl
-          << "4. Tentang" << endl
-          << "5. Keluar" << endl
+    cout  << "1. 🔑 Masuk" << endl
+          << "2. 📝 Registrasi" << endl
+          << "3. 🤝 Menjadi Partner" << endl
+          << "4. ❔ Tentang" << endl
+          << "5. ❌ Tutup" << endl
           << "Pilih : "; cin >> choice;
     return check(choice);
   }
@@ -34,10 +34,10 @@ namespace menu {
   int login() {
     string choice;
     utility::header("Mangan - Masuk Sebagai?");
-    cout  << "1. Pengguna" << endl
-          << "2. Partner" << endl
-          << "3. Partner" << endl
-          << "4. Kembali" << endl
+    cout  << "1. 😄 Pengguna" << endl
+          << "2. 🤝 Partner" << endl
+          << "3. 🛵 Driver" << endl
+          << "4. ⬅  Kembali" << endl
           << "Pilih : "; cin >> choice;
     return check(choice);
   }
