@@ -27,5 +27,16 @@ namespace structure {
     kamar kamar;
     wbp wbp;
   };
+
+  struct Node {
+    vector<string> data;
+    Node *next;
+  };
+
+  struct Auth {
+    int id = 0;
+    bool is_login = false;
+    string role = 'admin';
+  }
 }
 

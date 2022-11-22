@@ -2,6 +2,9 @@
 
 #include "../include/utility.h"
 #include "../include/menu.h"
+#include "../include/user/auth.h"
+#include "../include/partner/auth.h"
+#include "../include/driver/auth.h"
 
 using namespace std;
 
@@ -23,13 +26,13 @@ int main() {
           login_choice = menu::login();
           switch (login_choice) {
             case 1:
-              /* code */
+              user_auth::login();
               break;
             case 2:
-              /* code */
+              partner_auth::login();
               break;
             case 3:
-              /* code */
+              driver_auth::login();
               break;
             case 4:
               is_login_running = false;
@@ -43,10 +46,10 @@ int main() {
         }
         break;
       case 2:
-        utility::notify("info", "Terima kasih!");
+        user_auth::regist();
         break;
       case 3:
-        utility::notify("info", "Terima kasih!");
+        partner_auth::regist();
         break;
       case 4:
         utility::header("Mangan - Tentang");

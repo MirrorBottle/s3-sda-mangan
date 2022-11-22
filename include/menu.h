@@ -41,73 +41,23 @@ namespace menu {
           << "Pilih : "; cin >> choice;
     return check(choice);
   }
-  // ** FOR THE MAIN
-  int guess() {
+
+  // * FOR USER
+  int user() {
     string choice;
-    utility::header("VISITME - KUNJUNGAN LAPAS");
-    cout  << "1. Registrasi Kunjungan" << endl
-          << "2. Cek Status Kunjungan" << endl
-          << "3. Daftar WBP" << endl
-          << "4. Masuk Sebagai Operator" << endl
-          << "5. Keluar" << endl
-          << "Pilih : "; cin >> choice;
-    return check(choice);
-    
-  }
-  int main() {
-    string choice;
-    utility::header("VISITME - MENU UTAMA");
-    cout  << "1. Validasi Kunjungan" << endl
-          << "2. Jadwal Ketersediaan Kamar" << endl
-          << "3. Data Master" << endl
-          << "4. Keluar" << endl
+    utility::header("Mangan - Hi, Sahabat Lapar!!");
+    cout  << "1. 🏃 Order Berlangsung" << endl
+          << "2. 🍖 Cari Mangan" << endl
+          << "3. ⏳ Histori" << endl
+          << "4. 😋 Profil" << endl
+          << "5. ⬅  Keluar" << endl
           << "Pilih : "; cin >> choice;
     return check(choice);
   }
 
-  int master() {
-    string choice;
-    utility::header("VISITME - DATA MASTER");
-    cout  << "1. Kunjungan" << endl
-          << "2. WBP" << endl
-          << "3. Kamar" << endl
-          << "4. Kembali" << endl
-          << "Pilih : "; cin >> choice;
-    return check(choice);
-  }
-
-  // ** FOR THE ENTITIES
-  int kamar() {
-    string choice;
-    utility::header("VISITME - MANAJEMEN KAMAR");
-    cout  << "1. Daftar Kamar" << endl
-          << "2. Tambah Kamar" << endl
-          << "3. Ubah Kamar" << endl
-          << "4. Hapus Kamar" << endl
-          << "5. Kembali" << endl
-          << "Pilih : "; cin >> choice;
-    return check(choice);
-  }
-
-  int kunjungan() {
-    string choice;
-    utility::header("VISITME - MANAJEMEN KAMAR");
-    cout  << "1. Daftar Kunjungan" << endl
-          << "2. Ubah Kunjungan" << endl
-          << "3. Hapus Kunjungan" << endl
-          << "4. Kembali" << endl
-          << "Pilih : "; cin >> choice;
-    return check(choice);
-  }
-
-  int wbp() {
-    string choice;
-    utility::header("VISITME - MANAJEMEN WBP");
-    cout  << "1. Daftar WBP" << endl
-          << "2. Keluar" << endl
-          << "Pilih : "; cin >> choice;
-    return check(choice);
-  }
+  // * FOR PARTNER
+  // * FOR DRIVER
+  // * FOR ADMIN
 
   // ** FOR OTHERS
   int searching() {
