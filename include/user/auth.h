@@ -11,6 +11,7 @@
 #include "../struct.h"
 #include "../table.h"
 #include "../menu.h"
+#include "../auth.h"
 
 #include "./partner.h"
 #include "./delivery.h"
@@ -20,7 +21,7 @@ using namespace std;
 using namespace structure;
 
 namespace user_auth {
-  const string PATH = "../../files/users.csv";
+  const string PATH = "../files/users.csv";
   const int TABLE_COLUMNS_LENGTH = 6;
   string TABLE_COLUMNS[] = {"No.", "ID", "Nama", "Email", "Alamat", "Kontak"};
 
@@ -37,7 +38,6 @@ namespace user_auth {
 
     string invoke = "curl --request POST -s -o data.txt --data \"uri=" + url + "\" https://s3-sda-mangan.vercel.app";
     system(invoke.c_str());
-    // system(invoke.c_str());
     
     ifstream file("data.txt");//Retrieving response from data.txt
     while (getline (file, res)) {
@@ -52,10 +52,30 @@ namespace user_auth {
     string delimiter = ",";
     string latitude = coordinates.substr(0, coordinates.find(delimiter));
     string longitude = coordinates.erase(0, coordinates.find(delimiter) + delimiter.length());
+
+    cout << latitude << "-" << longitude << endl;
   }
 
-  void login() {
+  bool login() {
+    bool is_login = false;
+    string username, password;
+    string cur_password, cur_username, hashed;
     utility::header("Mangan - Login Pengguna");
-    user::index();
+    cout << "Masukkan Email: "; cin >> username;
+    cout << "Masukkan Password: "; cin >> password;
+    Node* list = utility::list(PATH);
+    while (list != NULL){
+      cur_username = utility::toLower(list->data[2]);
+      cur_password = list->data[7];
+      hashed = to_string(utility::hash(password));
+      if(cur_username == username && cur_password == hashed) {
+        is_login = true;
+        auth.id = list->data[0];
+        auth.name = list->data[1];
+        break;
+      }
+      list = list->next;
+    }
+    return is_login;
   }
 }

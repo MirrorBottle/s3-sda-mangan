@@ -4,9 +4,12 @@
 #include <tuple>
 #include <ctype.h>
 
+#include "../include/struct.h"
 #include "../include/utility.h"
+#include "../include/auth.h"
 
 using namespace std;
+
 namespace menu {
   int check(string choice) {
     try {
@@ -45,7 +48,7 @@ namespace menu {
   // * FOR USER
   int user() {
     string choice;
-    utility::header("Mangan - Hi, Sahabat Lapar!!");
+    utility::header("Mangan - Hi, Sahabat Lapar!!", "Bagaimana kabarmu, " + auth.name);
     cout  << "1. 🏃 Order Berlangsung" << endl
           << "2. 🍖 Cari Mangan" << endl
           << "3. ⏳ Histori" << endl

@@ -52,6 +52,6 @@ namespace partner_auth {
   }
 
   void login() {
-    utility::header("Mangan - Login Pengguna");
+    utility::header("Mangan - Login Partner");
   }
 }

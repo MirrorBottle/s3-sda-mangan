@@ -59,7 +59,7 @@ namespace utility
   void header(string title, string subtitle = "")
   {
     system("cls");
-    utility::cout("red", "\n\n=================================");
+    utility::cout("red", "=================================");
     utility::cout("red", title);
     if (subtitle != "")
     {
@@ -125,9 +125,6 @@ namespace utility
     return root;
   }
 
-  vector<vector<string>> linkedListConvert(Node *head)
-  {
-  }
   // * END OF LINKED LIST UTILS
   Node *list(string path)
   {
@@ -241,25 +238,19 @@ namespace utility
     slow->next = NULL;
   }
 
-  vector<vector<string>> sort(string path, int field, int type)
+  Node* sort(string path, int field, int type)
   {
-    // vector<vector<string>> list = utility::list(path);
-    // for(int i=0; i < list.size() - 1; i++) {
-    //   for(int j=i+1; j < list.size(); j++) {
-    //     // * 1 = ASC, 2 = DESC
-    //     bool is_pass = type == 1 ? list[i][field] > list[j][field] : list[i][field] < list[j][field];
-    //     if(is_pass) {
-    //       vector<string> temp = list[j];
-    //       list[j] = list[i];
-    //       list[i] = temp;
-    //     }
-    //   }
-    // }
-    // return list;
+    Node* head = utility::list(path);
+    MergeSort(&head, field, type);
+    return head;
   }
 
-  int fibonacciSearch(Node *node, string x, int n, int idx)
+  int fibonacciSearch(Node *node, int field, string keyword, bool is_exact = true)
   {
+    int n = utility::count(node);
+    string compared;
+    bool condition = false;
+    Node *root = NULL;
     int F0 = 0;
     int F1 = 1;
     int F = F0 + F1;
@@ -271,30 +262,29 @@ namespace utility
     }
     int offset = -1;
     int trv = 0;
+
     while (F > 1)
     {
       Node *temp = node;
       int i = min(offset + F0, n - 1);
-      while (temp->next != NULL && trv < i)
-      {
+      while (temp->next != NULL && trv < i) {
         temp = temp->next;
         trv++;
       }
-      if (temp->data[idx] < x)
-      {
+      compared = utility::toLower(temp->data[field]);
+      condition = is_exact ? (compared == keyword) : (compared.find(keyword) != string::npos);
+      if (compared < keyword) {
         F = F1;
         F1 = F0;
         F0 = F - F1;
         offset = i;
-      }
-      else if (temp->data[idx] > x)
-      {
+      } else if (compared > keyword) {
         F = F0;
         F1 = F1 - F0;
         F0 = F - F1;
-      }
-      else
+      } else {
         return i;
+      }
       trv = 0;
     }
     Node *temp2 = node;
@@ -303,96 +293,91 @@ namespace utility
       temp2 = temp2->next;
       trv++;
     }
-    if (F1 && temp2->data[idx] == x)
+    compared = utility::toLower(temp2->data[field]);
+    condition = is_exact ? (compared == keyword) : (compared.find(keyword) != string::npos);
+
+    std::cout << compared << "-" << keyword << endl;
+    if (F1 && condition)
       return offset + 1;
     return -1;
   }
 
-  Node *search(string path, const std::initializer_list<int> &fields, string keyword, bool is_universal = false, bool is_exact = false)
+  int search(string path, int field, string keyword, bool is_exact = false)
   {
-    vector<vector<string>> filtered;
     Node *head = utility::list(path);
-    string compared;
-    bool condition;
-
     keyword = utility::toLower(keyword);
-
-    // for(int index = 0; index < list.size(); index++) {
-    //   if(is_universal) {
-    //     for(int second_index = 0; second_index < list[index].size(); second_index++) {
-    //       compared = utility::toLower(list[index][second_index]);
-    //       if(compared.find(keyword) != string::npos) {
-    //         filtered.push_back(list[index]);
-    //       }
-    //     }
-    //   } else {
-    //     for (auto field : fields) {
-    //       compared = utility::toLower(list[index][field]);
-    //       condition = is_exact ? (compared == keyword) : (compared.find(keyword) != string::npos);
-    //       if(condition) {
-    //         filtered.push_back(list[index]);
-    //       }
-    //     }
-    //   }
-    // }
-    return head;
-  }
-
-  vector<string> find(string path, const std::initializer_list<int> &fields, string keyword, bool is_exact = true)
-  {
-    // vector<string> empty;
-    // vector<vector<string>> list = utility::search(path, fields, keyword, false, is_exact);
-    // return list.empty() ? empty : list.back();
+    MergeSort(&head, 0, 1);
+    int idx = fibonacciSearch(head, field, keyword, is_exact);
+    return idx;
   }
 
   void update(string path, int field, int field_length, string identifier, string new_data[])
   {
-    // fstream file;
+    fstream file;
 
-    // identifier = utility::toLower(identifier);
+    identifier = utility::toLower(identifier);
 
-    // vector<vector<string>> content = utility::list(path);
+    Node* head = utility::list(path);
 
-    // file.open(path, ios::out);
-    // for(int row = 0; row < content.size(); row++) {
-    //   string val;
-    //   string compared = utility::toLower(content[row][field]);
-    //   if(compared != identifier) {
-    //     for(int col = 0; col < content[row].size(); col++) {
-    //       val += content[row][col] + ",";
-    //     }
-    //   } else {
-    //     for(int new_data_col = 0; new_data_col < field_length; new_data_col++) {
-    //       val += new_data[new_data_col] + ",";
-    //     }
-    //   }
-    //   val += "\n";
-    //   file << val;
-    // }
-    // file.close();
+    while(head != NULL) {
+      string val;
+      string compared = utility::toLower(head->data[field]);
+      if(compared != identifier) {
+        for(int col = 0; col < head->data.size(); col++) {
+          val += head->data[col] + ",";
+        }
+      } else {
+        for(int new_data_col = 0; new_data_col < field_length; new_data_col++) {
+          val += new_data[new_data_col] + ",";
+        }
+      }
+      val += "\n";
+      file << val;
+      head = head->next;
+    }
+    file.close();
   }
 
-  void destroy(string path, int field, int field_length, string identifier)
+  void destroy(string path, int field, string identifier)
   {
-    // fstream file;
+    fstream file;
+    identifier = utility::toLower(identifier);
 
-    // identifier = utility::toLower(identifier);
+    Node* head = utility::list(path);
+    Node *temp = head;
+    Node *prev = NULL;
 
-    // vector<vector<string>> content = utility::list(path);
+    // If head node itself holds
+    // the key to be deleted
+    if (temp != NULL && temp->data[field] == utility::toLower(temp->data[field]))
+    {
+      head = temp->next;
+      delete temp;
+      return;
+    } else {
+      while (temp != NULL && temp->data[field] != utility::toLower(temp->data[field]))
+      {
+        prev = temp;
+        temp = temp->next;
+      }
+      if (temp == NULL)
+        return;
+      prev->next = temp->next;
+      delete temp;
+    }
 
-    // file.open(path, ios::out);
-    // for(int row = 0; row < content.size(); row++) {
-    //   string val;
-    //   string compared = utility::toLower(content[row][field]);
-    //   if(compared != identifier) {
-    //     for(int col = 0; col < content[row].size(); col++) {
-    //       val += content[row][col] + ",";
-    //     }
-    //     val += "\n";
-    //     file << val;
-    //   }
-    // }
-    // file.close();
+    file.open(path, ios::out);
+    while (head != NULL)
+    {
+      string val;
+      for(int col = 0; col < head->data.size(); col++) {
+        val += head->data[col] + ",";
+      }
+      val += "\n";
+      file << val;
+      head = head->next;
+    }
+    file.close();
   }
 
   TextTable table(int cols, string headers[], Node *head)

@@ -34,9 +34,9 @@ namespace structure {
   };
 
   struct Auth {
-    int id = 0;
-    bool is_login = false;
-    string role = 'admin';
-  }
+    string id = "0";
+    string name = "-";
+    string role = "admin";
+  };
 }
 
