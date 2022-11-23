@@ -23,7 +23,6 @@ int main() {
   bool is_login_running = false;
 
 
-  user_auth::regist();
   while(is_running) {
     landing_choice = menu::landing();
     switch (landing_choice) {
@@ -42,10 +41,22 @@ int main() {
               }
               break;
             case 2:
-              partner_auth::login();
+              is_login = partner_auth::login();
+              if(is_login) {
+                utility::notify("success", "Berhasil login!");
+                user::index();
+              } else {
+                utility::notify("error", "Akun tidak terdaftar!");
+              }
               break;
             case 3:
-              driver_auth::login();
+              is_login = driver_auth::login();
+              if(is_login) {
+                utility::notify("success", "Berhasil login!");
+                user::index();
+              } else {
+                utility::notify("error", "Akun tidak terdaftar!");
+              }
               break;
             case 4:
               is_login_running = false;

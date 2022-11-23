@@ -59,7 +59,31 @@ namespace menu {
   }
 
   // * FOR PARTNER
+  int partner() {
+    string choice;
+    utility::header("Mangan - Hi, Partner Mangan!!", "Siap menyapa para kang lapar, " + auth.name + "?");
+    cout  << "1. ⏰ Antrian" << endl
+          << "2. 👨‍🍳 Diterima" << endl
+          << "3. ⏳ Histori" << endl
+          << "4. 😋 Profil" << endl
+          << "5. 🥣 Daftar Menu" << endl
+          << "6. ⬅  Keluar" << endl
+          << "Pilih : "; cin >> choice;
+    return check(choice);
+  }
+
   // * FOR DRIVER
+  int driver() {
+    string choice;
+    utility::header("Mangan - Hi, Driver Mangan!!", "Siap bekerja, " + auth.name + "?");
+    cout  << "1. 🏃 Order Berlangsung" << endl
+          << "2. ⚡ Order Open" << endl
+          << "3. ⏳ Histori" << endl
+          << "4. 😋 Profil" << endl
+          << "5. ⬅  Keluar" << endl
+          << "Pilih : "; cin >> choice;
+    return check(choice);
+  }
   // * FOR ADMIN
 
   // ** FOR OTHERS

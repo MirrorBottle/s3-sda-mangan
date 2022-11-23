@@ -10,8 +10,8 @@ Sistem Kunjungan Lapas Online untuk Projek Akhir Algoritma Pemrograman Online In
 ## Daftar CSV
 
 1. users: id,name,email,address,phone_number,lat,long,password
-1. partners: id,name,email,address,phone_number,password,lat,long
-2. drivers: id,name,email,phone_number,password,plate_number
+1. partners: id,name,email,address,phone_number,lat,long,password
+2. drivers: id,name,email,phone_number,plate_number,password
 3. menus: id,user_id,name,description,price,is_available
 4. deliveries: id,user_id,driver_id,partner_id,partner_lat,partner_long,destination_lat,destination_long,distance,fee,start_at,end_at
 5. delivery_details: id,delivery_id,menu_id,amount,fee
