@@ -12,6 +12,7 @@
 #include <functional>
 #include <algorithm>
 #include <ctime>
+#include <iterator>
 
 #include "./struct.h"
 #include "./data.h"
@@ -94,6 +95,11 @@ namespace utility
     return hashed(word);
   }
 
+  string join(const vector<string>& vec, const char* delim) {
+    stringstream res;
+    copy(vec.begin(), vec.end(), ostream_iterator<string>(res, delim));
+    return res.str();
+  }
   int count(Node *head)
   {
     int count = 0;        // Initialize count
@@ -107,12 +113,28 @@ namespace utility
   }
 
   // * LINKED LIST UTILS
-  void linkedListInsert(Node *&head, vector<string> data)
-  {
+  void linkedListAddFirst(Node *&head, vector<string> data) {
     Node *node = new Node;
     node->data = data;
     node->next = head;
     head = node;
+  }
+  void linkedListAddLast(Node *&head, vector<string> data)
+  {
+    Node *node = new Node;
+    node->data = data;
+
+    if (head == NULL)
+    {
+        head = node;
+        return;
+    }
+    Node *temp = head;
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    temp->next = node;
   }
 
   Node *linkedListTransform(vector<vector<string>> content)
@@ -120,9 +142,22 @@ namespace utility
     Node *root = NULL;
     for (int row = 0; row < content.size(); row++)
     {
-      utility::linkedListInsert(root, content[row]);
+      utility::linkedListAddFirst(root, content[row]);
     }
     return root;
+  }
+
+  void linkedListSaveToFile(string path, Node *head) {
+    fstream file;
+    file.open(path, ios::out);
+    while (head->next != NULL) {
+      string data = utility::join(head->data, ",");
+      data += "\n";
+      std::cout << data << endl;
+      file << data;
+      head = head->next;
+    }
+    file.close();
   }
 
   // * END OF LINKED LIST UTILS
@@ -152,14 +187,6 @@ namespace utility
     file.close();
     Node *root = utility::linkedListTransform(content);
     return root;
-  }
-
-  vector<string> latest(string path)
-  {
-    Node *head = utility::list(path);
-    while (head->next != NULL)
-      head = head->next;
-    return head->data;
   }
   Node *SortedMerge(Node *a, Node *b, int attribute, int type);
   void FrontBackSplit(Node *source, Node **frontRef, Node **backRef);
@@ -245,6 +272,14 @@ namespace utility
     return head;
   }
 
+  vector<string> latest(string path)
+  {
+    Node *head = utility::sort(path, 0, 1);
+    while (head->next != NULL)
+      head = head->next;
+    return head->data;
+  }
+
   int fibonacciSearch(Node *node, int field, string keyword, bool is_exact = true)
   {
     int n = utility::count(node);
@@ -295,8 +330,7 @@ namespace utility
     }
     compared = utility::toLower(temp2->data[field]);
     condition = is_exact ? (compared == keyword) : (compared.find(keyword) != string::npos);
-
-    std::cout << compared << "-" << keyword << endl;
+    
     if (F1 && condition)
       return offset + 1;
     return -1;
