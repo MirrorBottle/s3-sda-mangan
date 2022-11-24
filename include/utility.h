@@ -338,11 +338,32 @@ namespace utility
 
   int search(string path, int field, string keyword, bool is_exact = false)
   {
-    Node *head = utility::list(path);
+    Node *head = utility::sort(path, 0, 1);
     keyword = utility::toLower(keyword);
-    MergeSort(&head, 0, 1);
     int idx = fibonacciSearch(head, field, keyword, is_exact);
     return idx;
+  }
+
+  vector<string> find(string path, int field, string keyword, bool is_exact = false)
+  {
+    vector<string> data;
+    Node *head = utility::sort(path, field, 1);
+    int idx = utility::search(path, field, keyword, is_exact);
+    int row = 0;
+
+    if(idx == row) {
+      return head->data;
+    }
+
+    while (head->next != NULL)
+    {
+      if(row == idx) {
+        return head->data;
+      }
+      row++;
+    }
+
+    return data;
   }
 
   void update(string path, int field, int field_length, string identifier, string new_data[])
@@ -431,7 +452,17 @@ namespace utility
 
     // SET ROWS
     int row_nums = 1;
-    while (head != NULL)
+    
+    if(head->next == NULL) {
+      for (int col = 0; col < cols; col++)
+      {
+        string val = col != 0 ? head->data[col - 1] : to_string(row_nums);
+        table.add(val);
+      }
+      table.endOfRow();
+    }
+
+    while (head->next != NULL)
     {
       for (int col = 0; col < cols; col++)
       {

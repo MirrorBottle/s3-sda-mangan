@@ -13,8 +13,17 @@ Sistem Kunjungan Lapas Online untuk Projek Akhir Algoritma Pemrograman Online In
 1. partners: id,name,email,address,phone_number,lat,long,password
 2. drivers: id,name,email,phone_number,plate_number,password
 3. menus: id,user_id,name,description,price,is_available
-4. deliveries: id,user_id,driver_id,partner_id,partner_lat,partner_long,destination_lat,destination_long,distance,fee,start_at,end_at
+4. deliveries: id,user_id,driver_id,partner_id,partner_lat,partner_long,destination_lat,destination_long,distance,fee,start_at,end_at,status
 5. delivery_details: id,delivery_id,menu_id,amount,fee
-6. delivery_histories: id,delivery_id,status,time,is_completed,description
+6. delivery_histories: id,delivery_id,status,time,description
 7. delivery_ratings: id,delivery_id,ratings,comments,tip
 8. settings: key,value
+
+
+## Delivery Status & Histories
+1. Pesanan Diterima
+2. Pesanan Dikonfirmasi Partner
+3. Pesanan Diproses Partner
+4. Pesanan Dikonfrimasi Driver
+5. Pesanan Diantar Driver
+6. Pesanan Diterima Pengguna

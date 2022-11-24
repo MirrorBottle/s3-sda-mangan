@@ -15,26 +15,21 @@ namespace data {
     { "white", "\033[37m" }
   };
 
-  map<string, int> status_kunjungan = {
-    { "menunggu", 1 },
-    { "diterima", 2 },
-    { "ditolak", 3 },
+  map<string, string> status_delivery = {
+    { "ACCEPT", "1" },
+    { "PARTNER_CONFIRM", "2" },
+    { "PARTNER_PROCESS", "3" },
+    { "DRIVER_CONFIRM", "4" },
+    { "DRIVER_DELIVER", "5" },
+    { "FINISH", "6" },
   };
 
-  map<int, string> label_status_kunjungan = {
-    { 1, "MENUNGGU" },
-    { 2, "DITERIMA" },
-    { 3, "DITOLAK " },
-  };
-
-  map<int, string> color_status_kunjungan = {
-    { 1, "yellow" },
-    { 2, "green" },
-    { 3, "red" },
-  };
-
-  map<string, string> operational = {
-    { "start", "09:00" },
-    { "end", "16:00" }
+  map<string, string> label_status_delivery = {
+    { "ACCEPT", "Pesanan Diterima" },
+    { "PARTNER_CONFIRM", "Pesanan Dikonfirmasi Partner" },
+    { "PARTNER_PROCESS", "Pesanan Diproses Partner" },
+    { "DRIVER_CONFIRM", "Pesanan Dikonfirmasi Driver" },
+    { "DRIVER_DELIVER", "Pesanan Diantar Driver" },
+    { "FINISH", "Pesanan Diterima Pengguna" },
   };
 }
