@@ -7,13 +7,10 @@
 #include <string>
 #include <tuple>
 
-#include "../utility.h"
-#include "../struct.h"
-#include "../table.h"
-#include "../menu.h"
-
-#include "./partner.h"
-#include "./delivery.h"
+#include "./utility.h"
+#include "./struct.h"
+#include "./table.h"
+#include "./menu.h"
 
 
 using namespace std;

@@ -7,14 +7,11 @@
 #include <string>
 #include <tuple>
 
-#include "../data.h"
-#include "../utility.h"
-#include "../struct.h"
-#include "../table.h"
-#include "../menu.h"
-
-#include "./partner.h"
-#include "./delivery.h"
+#include "./data.h"
+#include "./utility.h"
+#include "./struct.h"
+#include "./table.h"
+#include "./menu.h"
 
 
 using namespace std;
@@ -90,9 +87,6 @@ namespace user {
       switch (choice) {
         case 1:
           user::ongoing();
-          break;
-        case 2:
-          user_partner::list();
           break;
         case 3:
           user::history();

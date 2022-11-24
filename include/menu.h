@@ -26,10 +26,9 @@ namespace menu {
     string choice;
     utility::header("Mangan - Antaran Ketika Lapar");
     cout  << "1. 🔑 Masuk" << endl
-          << "2. 📝 Registrasi" << endl
-          << "3. 🤝 Menjadi Partner" << endl
-          << "4. ❔ Tentang" << endl
-          << "5. ❌ Tutup" << endl
+          << "2. 📝 Menjadi Pengguna" << endl
+          << "3. ❔ Tentang" << endl
+          << "4. ❌ Tutup" << endl
           << "Pilih : "; cin >> choice;
     return check(choice);
   }
@@ -38,9 +37,8 @@ namespace menu {
     string choice;
     utility::header("Mangan - Masuk Sebagai?");
     cout  << "1. 😄 Pengguna" << endl
-          << "2. 🤝 Partner" << endl
-          << "3. 🛵 Driver" << endl
-          << "4. ⬅  Kembali" << endl
+          << "2. 🛵 Driver" << endl
+          << "3. ⬅  Kembali" << endl
           << "Pilih : "; cin >> choice;
     return check(choice);
   }
@@ -58,29 +56,13 @@ namespace menu {
     return check(choice);
   }
 
-  // * FOR PARTNER
-  int partner() {
-    string choice;
-    utility::header("Mangan - Hi, Partner Mangan!!", "Siap menyapa para kang lapar, " + auth.name + "?");
-    cout  << "1. ⏰ Antrian" << endl
-          << "2. 👨‍🍳 Diterima" << endl
-          << "3. ⏳ Histori" << endl
-          << "4. 😋 Profil" << endl
-          << "5. 🥣 Daftar Menu" << endl
-          << "6. ⬅  Keluar" << endl
-          << "Pilih : "; cin >> choice;
-    return check(choice);
-  }
-
   // * FOR DRIVER
   int driver() {
     string choice;
     utility::header("Mangan - Hi, Driver Mangan!!", "Siap bekerja, " + auth.name + "?");
     cout  << "1. 🏃 Order Berlangsung" << endl
-          << "2. ⚡ Order Open" << endl
-          << "3. ⏳ Histori" << endl
-          << "4. 😋 Profil" << endl
-          << "5. ⬅  Keluar" << endl
+          << "2. ⏳ Histori" << endl
+          << "3. ⬅  Keluar" << endl
           << "Pilih : "; cin >> choice;
     return check(choice);
   }
