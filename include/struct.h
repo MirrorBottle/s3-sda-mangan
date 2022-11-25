@@ -30,7 +30,7 @@ namespace structure {
 
   struct Node {
     vector<string> data;
-    Node *next;
+    Node *next = NULL;
   };
 
   struct Auth {

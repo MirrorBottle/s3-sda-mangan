@@ -5,6 +5,10 @@
 #include "../include/struct.h"
 #include "../include/auth.h"
 #include "../include/user.h"
+#include "../include/driver.h"
+#include "../include/admin/main.h"
+#include "../include/admin/menu.h"
+
 
 using namespace std;
 
@@ -19,20 +23,30 @@ int main() {
   bool is_login = false;
   int landing_choice, login_choice , main_choice, wbp_list_choice;
   bool is_login_running = false;
+
   while(is_running) {
+
     landing_choice = menu::landing();
     switch (landing_choice) {
       case 1:
         is_login = auth_controller::login();
         if(is_login) {
           utility::notify("success", "Berhasil login!");
-          user::index();
+
+          if(auth.role == "admin") {
+            admin::index();
+          } else if (auth.role == "driver") {
+            driver::index();
+          } else {
+            user::index();
+          }
         } else {
           utility::notify("error", "Akun tidak terdaftar!");
         }
         break;
       case 2:
         auth_controller::regist();
+        user::index();
         break;
       case 4:
         utility::header("Mangan - Tentang");

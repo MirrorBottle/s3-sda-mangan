@@ -25,11 +25,15 @@ namespace data {
   };
 
   map<string, string> label_status_delivery = {
-    { "ACCEPT", "Pesanan Diterima" },
-    { "PARTNER_CONFIRM", "Pesanan Dikonfirmasi Partner" },
-    { "PARTNER_PROCESS", "Pesanan Diproses Partner" },
-    { "DRIVER_CONFIRM", "Pesanan Dikonfirmasi Driver" },
-    { "DRIVER_DELIVER", "Pesanan Diantar Driver" },
-    { "FINISH", "Pesanan Diterima Pengguna" },
+    { "1", "Daftar Tunggu" },
+    { "2", "Diterima" },
+    { "3", "Diantar" },
+    { "4", "Selesai" },
+  };
+
+  map<string, double> resto_detail {
+    { "latitude", -0.4682104 },
+    { "longitude", 117.1590505 },
+    { "fee", 1500 }
   };
 }

@@ -36,7 +36,7 @@ namespace utility
     char date_string[100];
     time(&curr_time);
     curr_tm = localtime(&curr_time);
-    strftime(date_string, 50, "%Y-%m-%d", curr_tm);
+    strftime(date_string, 50, "%Y-%m-%d %H:%M", curr_tm);
     return string(date_string);
   }
 
@@ -98,7 +98,22 @@ namespace utility
   string join(const vector<string>& vec, const char* delim) {
     stringstream res;
     copy(vec.begin(), vec.end(), ostream_iterator<string>(res, delim));
-    return res.str();
+
+    string str = res.str();
+    str.resize(str.size() - 1);
+    return str;
+  }
+
+  vector<int> split_ids(string ids) {
+    std::vector<int> vect;
+    std::stringstream ss(ids);
+
+    for (int i; ss >> i;) {
+        vect.push_back(i);    
+        if (ss.peek() == ',')
+            ss.ignore();
+    }
+    return vect;
   }
   int count(Node *head)
   {
@@ -147,19 +162,6 @@ namespace utility
     return root;
   }
 
-  void linkedListSaveToFile(string path, Node *head) {
-    fstream file;
-    file.open(path, ios::out);
-    while (head->next != NULL) {
-      string data = utility::join(head->data, ",");
-      data += "\n";
-      std::cout << data << endl;
-      file << data;
-      head = head->next;
-    }
-    file.close();
-  }
-
   // * END OF LINKED LIST UTILS
   Node *list(string path)
   {
@@ -188,6 +190,30 @@ namespace utility
     Node *root = utility::linkedListTransform(content);
     return root;
   }
+
+  vector<vector<string>> list_vector(string path) {
+    fstream file;
+    file.open(path, ios::in);
+    vector<vector<string>> content;
+    vector<string> row;
+    string line, word;
+
+    if(file.is_open()) {
+      while(getline(file, line)) {
+        row.clear();
+        stringstream str(line);
+        while(getline(str, word, ','))
+          row.push_back(word);
+        
+        content.push_back(row);
+      }
+    } else {
+      utility::notify("error", "File tidak ada!");
+    }
+    file.close();
+    return content;
+  }
+
   Node *SortedMerge(Node *a, Node *b, int attribute, int type);
   void FrontBackSplit(Node *source, Node **frontRef, Node **backRef);
   /* sorts the linked list by changing next pointers (not data) */
@@ -209,8 +235,7 @@ namespace utility
     /* answer = merge the two sorted lists together */
     *headRef = SortedMerge(a, b, attribute, type);
   }
-  /* See https:// www.geeksforgeeks.org/?p=3622 for details of this
-  function */
+
   Node *SortedMerge(Node *a, Node *b, int attribute, int type)
   {
     Node *result = NULL;
@@ -237,11 +262,7 @@ namespace utility
     }
     return (result);
   }
-  /* UTILITY FUNCTIONS */
-  /* Split the nodes of the given list into front and back halves,
-  and return the two lists using the reference parameters.
-  If the length is odd, the extra node should go in the front list.
-  Uses the fast/slow pointer strategy. */
+
   void FrontBackSplit(Node *source, Node **frontRef, Node **backRef)
   {
     Node *fast;
@@ -274,7 +295,16 @@ namespace utility
 
   vector<string> latest(string path)
   {
+    vector<string> empty_data;
     Node *head = utility::sort(path, 0, 1);
+
+    if(head == NULL) {
+      return empty_data;
+    }
+
+    if(head->next == NULL) {
+      return head->data;
+    }
     while (head->next != NULL)
       head = head->next;
     return head->data;
@@ -330,40 +360,72 @@ namespace utility
     }
     compared = utility::toLower(temp2->data[field]);
     condition = is_exact ? (compared == keyword) : (compared.find(keyword) != string::npos);
-    
+
     if (F1 && condition)
       return offset + 1;
     return -1;
   }
 
-  int search(string path, int field, string keyword, bool is_exact = false)
-  {
-    Node *head = utility::sort(path, 0, 1);
-    keyword = utility::toLower(keyword);
-    int idx = fibonacciSearch(head, field, keyword, is_exact);
-    return idx;
-  }
-
   vector<string> find(string path, int field, string keyword, bool is_exact = false)
   {
     vector<string> data;
-    Node *head = utility::sort(path, field, 1);
-    int idx = utility::search(path, field, keyword, is_exact);
-    int row = 0;
+    Node *head = utility::sort(path, 0, 1);
+    keyword = utility::toLower(keyword);
+    int idx = fibonacciSearch(head, field, keyword, is_exact);
 
-    if(idx == row) {
-      return head->data;
-    }
-
-    while (head->next != NULL)
-    {
-      if(row == idx) {
+    
+    if(idx != -1) {
+      int row = 0;
+      if(head->next == NULL && idx == row) {
         return head->data;
       }
-      row++;
+      while (head != NULL)
+      {
+        if(row == idx) {
+          data = head->data;
+          return data;
+        }
+        head = head->next;
+        row++;
+      }
     }
-
     return data;
+  }
+
+  string search_keyword() {
+    string keyword;
+    std::cout << "🔎 Kata kunci pencarian: "; fflush(stdin); getline(cin, keyword);
+    return keyword;
+  }
+
+  Node *search(string path, const std::initializer_list<int>& fields, string keyword, bool is_universal = false, bool is_exact = false) {
+    vector<vector<string>> filtered;
+    vector<vector<string>> list = utility::list_vector(path);
+    string compared;
+    bool condition;
+
+    keyword = utility::toLower(keyword);
+
+    for(int index = 0; index < list.size(); index++) {
+      if(is_universal) {
+        for(int second_index = 0; second_index < list[index].size(); second_index++) {
+          compared = utility::toLower(list[index][second_index]);
+          if(compared.find(keyword) != string::npos) {
+            filtered.push_back(list[index]);
+          }
+        }
+      } else {
+        for (auto field : fields) {
+          compared = utility::toLower(list[index][field]);
+          condition = is_exact ? (compared == keyword) : (compared.find(keyword) != string::npos);
+          if(condition) {
+            filtered.push_back(list[index]);
+          }
+        }
+      }
+    }
+    Node *root = utility::linkedListTransform(filtered);
+    return root;
   }
 
   void update(string path, int field, int field_length, string identifier, string new_data[])
@@ -374,9 +436,11 @@ namespace utility
 
     Node* head = utility::list(path);
 
+    file.open(path, ios::out);
     while(head != NULL) {
       string val;
       string compared = utility::toLower(head->data[field]);
+
       if(compared != identifier) {
         for(int col = 0; col < head->data.size(); col++) {
           val += head->data[col] + ",";
@@ -386,6 +450,7 @@ namespace utility
           val += new_data[new_data_col] + ",";
         }
       }
+      val.resize(val.size() - 1);
       val += "\n";
       file << val;
       head = head->next;
@@ -404,13 +469,13 @@ namespace utility
 
     // If head node itself holds
     // the key to be deleted
-    if (temp != NULL && temp->data[field] == utility::toLower(temp->data[field]))
+    if (temp != NULL && temp->data[field] == identifier)
     {
       head = temp->next;
       delete temp;
       return;
     } else {
-      while (temp != NULL && temp->data[field] != utility::toLower(temp->data[field]))
+      while (temp != NULL && temp->data[field] != identifier)
       {
         prev = temp;
         temp = temp->next;
@@ -438,9 +503,11 @@ namespace utility
   TextTable table(int cols, string headers[], Node *head)
   {
     TextTable table('-', '|', '+');
+
     if (head == NULL)
     {
       utility::notify("error", "Tidak ada data!");
+      return table;
     }
 
     // SET HEADERS
@@ -453,15 +520,6 @@ namespace utility
     // SET ROWS
     int row_nums = 1;
     
-    if(head->next == NULL) {
-      for (int col = 0; col < cols; col++)
-      {
-        string val = col != 0 ? head->data[col - 1] : to_string(row_nums);
-        table.add(val);
-      }
-      table.endOfRow();
-    }
-
     while (head->next != NULL)
     {
       for (int col = 0; col < cols; col++)
@@ -473,6 +531,17 @@ namespace utility
       head = head->next;
       row_nums++;
     }
+
+    if(head->next == NULL) {
+      for (int col = 0; col < cols; col++)
+      {
+        string val = col != 0 ? head->data[col - 1] : to_string(row_nums);
+        table.add(val);
+      }
+      table.endOfRow();
+    }
+
+    
     return table;
   }
 };

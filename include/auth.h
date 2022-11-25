@@ -30,21 +30,21 @@ namespace auth_controller {
 
   bool login() {
     bool is_login = false;
-    string username, password;
-    string cur_password, cur_username, hashed;
+    string email, password;
+    string cur_password, cur_email, hashed;
     utility::header("Mangan - Login");
-    cout << "Masukkan Email: "; cin >> username;
+    cout << "Masukkan Email: "; cin >> email;
     cout << "Masukkan Password: "; cin >> password;
     Node* list = utility::list(PATH);
     while (list != NULL){
-      cur_username = utility::toLower(list->data[2]);
+      cur_email = utility::toLower(list->data[2]);
       cur_password = list->data[7];
       hashed = to_string(utility::hash(password));
-      if(cur_username == username && cur_password == hashed) {
+      if(cur_email == email && cur_password == hashed) {
         is_login = true;
         auth.id = list->data[0];
         auth.name = list->data[1];
-        auth.role = list->data[7];
+        auth.role = list->data[8];
         break;
       }
       list = list->next;
@@ -65,19 +65,22 @@ namespace auth_controller {
 
     while(!is_email_not_exist) {
       cout << "Email: "; cin >> email;
-      is_email_not_exist = utility::search(PATH, 2, email, true) == -1;
+      vector<string> email_found = utility::find(PATH, 2, email, true);
+      is_email_not_exist = email_found.empty();
 
       if(!is_email_not_exist) {
         utility::notify("error", "Email sudah ada!");
       }
     }
 
-    cout << "Nama: "; cin >> name;
+    cout << "Nama: "; fflush(stdin); getline(cin, name);
     cout << "No. HP: "; cin >> phone_number;
     cout << "Alamat: "; fflush(stdin); getline(cin, address);
     cout << "Link Lokasi (contoh: https://goo.gl/maps/ZA8YcgaHsDSJgDH97): "; fflush(stdin); getline(cin, url);
     
     cout << "Password: "; cin >> password;
+
+    utility::cout("cyan", "Sedang mengambil data lokasimu...");
     string invoke = "curl --request POST -s -o data.txt --data \"uri=" + url + "\" https://s3-sda-mangan.vercel.app";
     system(invoke.c_str());
     
@@ -97,16 +100,20 @@ namespace auth_controller {
     latitude = coordinates.substr(0, coordinates.find(delimiter));
     longitude = coordinates.erase(0, coordinates.find(delimiter) + delimiter.length());
     
+    utility::cout("success", "Berhasil mengambil data lokasi!");
+  
     id = to_string(stoi(latest_user[0]) + 1);
 
     string hashed_password = to_string(utility::hash(password));
 
-    string data = id + "," + name + "," + email + "," + address + "," + phone_number + "," + latitude + "," + longitude + "," + hashed_password;
+    string data = id + "," + name + "," + email + "," + address + "," + phone_number + "," + latitude + "," + longitude + "," + hashed_password + ",user";
     file.open(PATH, ios::app);
     file << "\n" << data;
     file.close();
 
-
+    auth.id = id;
+    auth.name = name;
+    auth.role = "user";
     utility::notify("success", "Yey, Kamu sudah terdaftar, nih!");
   }
 }
