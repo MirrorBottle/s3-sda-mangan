@@ -62,6 +62,15 @@ namespace menu {
     return check(choice);
   }
 
+  int user_list() {
+    string choice;
+    cout  << "1. ✅ Selesaikan Pesanan" << endl
+          << "2. 📝 Detail Pesanan" << endl
+          << "3. ⬅  Kembali" << endl
+          << "Pilih : "; cin >> choice;
+    return check(choice);
+  }
+
   // * FOR DRIVER
   int driver() {
     string choice;

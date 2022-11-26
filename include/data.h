@@ -27,8 +27,8 @@ namespace data {
   map<string, string> label_status_delivery = {
     { "1", "Daftar Tunggu" },
     { "2", "Diterima" },
-    { "3", "Diantar" },
-    { "4", "Selesai" },
+    { "3", "Selesai" },
+    { "4", "Ditolak" },
   };
 
   map<string, double> resto_detail {

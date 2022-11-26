@@ -18,44 +18,17 @@ using namespace std;
 using namespace structure;
 
 namespace admin_user {
+  const string PATH = "../files/users.csv";
 
-  void ongoing() {
-    utility::header("Mangan - Order Berlangsung");
-  }
-
-  void history() {
-    utility::header("Mangan - Histori");
-    utility::notify("success", "Histori");
-  }
-
-  void profile() {
-    utility::header("Mangan - Profile");
-    utility::notify("success", "Profile");
-  }
+  const int TABLE_COLUMNS_LENGTH = 6;
+  string TABLE_COLUMNS[] = {"No.", "ID", "Nama", "Email", "Alamat", "No. HP"};
 
   void index() {
-    bool is_running = true;
-    bool is_list_running = false;
-    int choice, list_choice;
-    while(is_running) {
-      choice = menu::admin_user();
-      switch (choice) {
-        case 1:
-          admin_user::ongoing();
-          break;
-        case 3:
-          admin_user::history();
-          break;
-        case 4:
-          admin_user::profile();
-          break;
-        case 5:
-          is_running = false;
-          break;
-        default:
-          utility::notify("error", "Pilihan tidak ada!");
-          break;
-      }
-    }
+    utility::header("Mangan - 📖 Daftar Pengguna");
+    Node *list = utility::search(PATH, { 8 }, "user");
+    TextTable table = utility::table(TABLE_COLUMNS_LENGTH, TABLE_COLUMNS, list);
+    cout << table;
+
+    utility::notify("success", "Untuk Kembali");
   }
 }

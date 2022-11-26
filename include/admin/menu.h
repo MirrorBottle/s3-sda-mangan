@@ -46,7 +46,7 @@ namespace admin_menu {
 
   void search() {
     utility::header("Mangan - 📖 Daftar Menu");
-    string keyword = "menu";
+    string keyword = utility::search_keyword();
     Node *list = utility::search(PATH, { 0 }, keyword, true);
     if(list == NULL) {
       utility::notify("error", "Data tidak ditemukan!");
@@ -79,6 +79,7 @@ namespace admin_menu {
     string id, name, description, price, avail;
     utility::header("Mangan - 📝 Ubah Menu");
 
+    admin_menu::list();
     cout << "ID Menu: "; cin >> id;
 
     vector<string> menu = utility::find(PATH, 0, id);
@@ -95,9 +96,8 @@ namespace admin_menu {
       name = name != "-" ? name : menu[1];
       description = description != "-" ? description : menu[2];
       price = price != "-" ? price : menu[3];
-      avail = avail != "-" ? avail : menu[4];
 
-      string data[] = {id, name, description, price, avail};
+      string data[] = {id, name, description, price};
 
       utility::update(PATH, 0, TABLE_COLUMNS_LENGTH - 1, id, data);
 
@@ -112,6 +112,7 @@ namespace admin_menu {
     string id;
     bool is_confirmed;
     utility::header("Mangan - ❌ Hapus Menu");
+    admin_menu::list();
     cout << "ID Menu: "; cin >> id;
     
     vector<string> menu = utility::find(PATH, 0, id);

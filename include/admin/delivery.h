@@ -50,7 +50,7 @@ namespace admin_delivery {
     }
 
     if(data[2] != "0") {
-      driver = utility::find(DRIVER_PATH, 0, data[2], true);
+      driver = utility::find(USER_PATH, 0, data[2], true);
     }
     sort(menus.begin(), menus.end() );
     menus.erase( unique( menus.begin(), menus.end() ), menus.end() );
@@ -93,7 +93,7 @@ namespace admin_delivery {
     int waiting_menu = menu::admin_waiting();
 
     string driver_id = "0";
-    string status = waiting_menu == 1 ? "2" : "3";
+    string status = waiting_menu == 1 ? "2" : "4";
 
     if(waiting_menu == 1) {
       cout << "Masukkan ID Driver"; cin >> driver_id;
@@ -120,44 +120,57 @@ namespace admin_delivery {
   }
 
   void ongoing() {
-    utility::header("Mangan - 🏃 Order Menunggu");
+    utility::header("Mangan - ⏳ Order Diterima");
 
-    Node *deliveries = utility::search(DELIVERY_PATH, { 1 }, auth.id, false, true);
+    Node *deliveries = NULL;
+    Node *list = utility::search(DELIVERY_PATH, { 11 }, "2", false, true);
+    utility::MergeSort(&list, 0, 2);
+  
+    
 
-    if(deliveries->next == NULL) {
-      vector<string> transformed = admin_delivery::transform(deliveries->data);
-      deliveries->data = transformed;
+    if(utility::count(list) < 1) {
+      utility::cout("red", "Tidak ada data!");
+    } else {
+      while(list->next != NULL) {
+        vector<string> data = list->data;
+        vector<string> transformed = admin_delivery::transform(data);
+        utility::linkedListAddFirst(deliveries, transformed);
+        list = list->next;
+      }
+
+      if(list->next == NULL) {
+        vector<string> data = list->data;
+        vector<string> transformed = admin_delivery::transform(data);
+        utility::linkedListAddFirst(deliveries, transformed);
+      }
+      TextTable table = utility::table(10, DELIVERY_TABLE_COLUMNS, deliveries);
+      cout << table;
     }
-    while(deliveries->next != NULL) {
-      vector<string> data = deliveries->data;
-      vector<string> transformed = admin_delivery::transform(data);
-      deliveries->data = transformed;
-      deliveries = deliveries->next;
-    }
-
-    TextTable table = utility::table(8, DELIVERY_TABLE_COLUMNS, deliveries);
-    cout << table;
-
     utility::notify("success", "Untuk Kembali");
   }
 
   void history() {
-    utility::header("Mangan - 🏃 Order Menunggu");
+    utility::header("Mangan - 🍖 Order");
 
-    Node *deliveries = utility::search(DELIVERY_PATH, { 1 }, auth.id, false, true);
-
-    if(deliveries->next == NULL) {
-      vector<string> transformed = admin_delivery::transform(deliveries->data);
-      deliveries->data = transformed;
-    }
-    while(deliveries->next != NULL) {
-      vector<string> data = deliveries->data;
+    Node *deliveries = NULL;
+    Node *list = utility::list(DELIVERY_PATH);
+    utility::MergeSort(&list, 0, 2);
+  
+    while(list->next != NULL) {
+      vector<string> data = list->data;
       vector<string> transformed = admin_delivery::transform(data);
-      deliveries->data = transformed;
-      deliveries = deliveries->next;
+      utility::linkedListAddFirst(deliveries, transformed);
+      list = list->next;
     }
 
-    TextTable table = utility::table(8, DELIVERY_TABLE_COLUMNS, deliveries);
+    if(list->next == NULL) {
+      vector<string> data = list->data;
+      vector<string> transformed = admin_delivery::transform(data);
+      utility::linkedListAddFirst(deliveries, transformed);
+    }
+  
+    TextTable table = utility::table(10, DELIVERY_TABLE_COLUMNS, deliveries);
+
     cout << table;
 
     utility::notify("success", "Untuk Kembali");

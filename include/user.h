@@ -29,10 +29,10 @@ namespace user {
   const string USER_PATH = "../files/users.csv";
   const string DELIVERY_DETAIL_PATH = "../files/delivery_details.csv";
   const string DELIVERY_PATH = "../files/deliveries.csv";
-  const string DRIVER_PATH = "../files/drivers.csv";
 
 
   string DELIVERY_TABLE_COLUMNS[] = {"No.", "ID", "Waktu Pesan", "Waktu Dikirim", "Driver", "Ongkir", "Total", "Status"};
+  string DELIVERY_DETAIL_TABLE_COLUMNS[] = {"No.", "ID", "Menu", "Jumlah", "Total"};
   string MENU_TABLE_COLUMNS[] = {"No.", "ID", "Nama", "Deskripsi", "Harga"};
   string DELIVERY_DETAIL_COLUMNS[] = {"No.", "ID Menu", "Nama", "Harga", "Total"};
 
@@ -52,7 +52,7 @@ namespace user {
     } 
 
     if(data[2] != "0") {
-      driver = utility::find(DRIVER_PATH, 0, data[2], true);
+      driver = utility::find(USER_PATH, 0, data[2], true);
     }
     transformed.push_back(data[0]);
     transformed.push_back(data[9]);
@@ -64,26 +64,94 @@ namespace user {
 
     return transformed;
   }
+
+  vector<string> transform_detail(vector<string> data) {
+    vector<string> menu = utility::find(MENU_PATH, 0, data[1], true);
+    vector<string> transformed;
+    int total = stoi(data[3]) * stoi(data[4]);
+    transformed.push_back(data[0]);
+    transformed.push_back(menu[1]);
+    transformed.push_back(data[3]);
+    transformed.push_back("Rp. " + to_string(total));
+    return transformed;
+  }
+
   void list() {
     utility::header("Mangan - 🏃 Daftar Order");
 
-    Node *deliveries = utility::search(DELIVERY_PATH, { 1 }, auth.id, false, true);
-
-    if(deliveries->next == NULL) {
-      vector<string> transformed = user::transform(deliveries->data);
-      deliveries->data = transformed;
-    }
-    while(deliveries->next != NULL) {
-      vector<string> data = deliveries->data;
+    Node *deliveries = NULL;
+    Node *list = utility::search(DELIVERY_PATH, { 1 }, auth.id, false, true);
+    utility::MergeSort(&list, 0, 2);
+  
+    while(list->next != NULL) {
+      vector<string> data = list->data;
       vector<string> transformed = user::transform(data);
-      deliveries->data = transformed;
-      deliveries = deliveries->next;
+      utility::linkedListAddFirst(deliveries, transformed);
+      list = list->next;
     }
 
+    if(list->next == NULL) {
+      vector<string> data = list->data;
+      vector<string> transformed = user::transform(data);
+      utility::linkedListAddFirst(deliveries, transformed);
+    }
+  
     TextTable table = utility::table(8, DELIVERY_TABLE_COLUMNS, deliveries);
     cout << table;
 
-    utility::notify("success", "Untuk Kembali");
+    string order_id;
+    vector<string> order;
+    int list_choice = menu::user_list();
+
+    if(list_choice < 3) {
+      cout << "Masukkan ID Order: "; cin >> order_id;
+      order = utility::find(DELIVERY_PATH, 0, order_id, true);
+    }
+  
+    if(list_choice == 1 && !order.empty()) {
+      bool is_confirmed = utility::confirm("Pesananmu akan dinyatakan selesai, ok? (y/t): ", false);
+      if(is_confirmed) {
+        string end_at = utility::today();
+        string data[] = {
+          order[0],
+          order[1],
+          order[2],
+          order[3],
+          order[4],
+          order[5],
+          order[6],
+          order[7],
+          order[8],
+          order[9],
+          end_at,
+          "3"
+        };
+        utility::update(DELIVERY_PATH, 0, 12, order[0], data);
+        utility::notify("success", "Untuk Kembali");
+      }
+    }
+
+    if(list_choice == 2 && !order.empty()) {
+      Node *delivery_details = NULL;
+      Node *list = utility::search(DELIVERY_DETAIL_PATH, { 1 }, order[0], false, true);
+      utility::MergeSort(&list, 0, 2);
+    
+      while(list->next != NULL) {
+        vector<string> data = list->data;
+        vector<string> transformed = user::transform_detail(data);
+        utility::linkedListAddFirst(delivery_details, transformed);
+        list = list->next;
+      }
+
+      if(list->next == NULL) {
+        vector<string> data = list->data;
+        vector<string> transformed = user::transform_detail(data);
+        utility::linkedListAddFirst(delivery_details, transformed);
+      }
+    
+      TextTable deliveryDetailTable = utility::table(8, DELIVERY_TABLE_COLUMNS, delivery_details);
+      cout << deliveryDetailTable;
+    }
   }
 
 
